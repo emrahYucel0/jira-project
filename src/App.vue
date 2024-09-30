@@ -1,30 +1,44 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+  <nav class="mainNav">
+    <router-link to="/">Yapılacaklar Listesi</router-link> |
+    <router-link to="/addTask">Yeni Görev Ekle</router-link> 
   </nav>
   <router-view/>
 </template>
 
 <style>
+* {
+  box-sizing: border-box;
+  margin: 0px;
+  padding: 0px;
+}
+
+body {
+  background: ghostwhite;
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  max-width: 600px;
+  width: 100%;
+  margin: 0px auto;
+}
+
+.mainNav {
   text-align: center;
-  color: #2c3e50;
+  margin: 40px 0px;
 }
 
-nav {
-  padding: 30px;
+.mainNav a {
+  text-decoration: none;
+  font-size: 18px;
+  color: gray;
+  margin: 0px 10px;
 }
 
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
+a.router-link-active {
+  border-bottom: 2px solid green;
+  padding-bottom: 4px;
 }
 </style>

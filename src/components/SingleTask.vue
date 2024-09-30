@@ -1,0 +1,90 @@
+<template >
+    <div class="task" :class="{complete: task.complete}">
+        <div class="actions">
+            <h3 @click="toggleDetail()">{{ task.title }}</h3>
+            <div>
+                <span @click="deleteTask()" class="material-symbols-outlined">delete</span>
+                <router-link :to="{name:'EditTaskView', params:{id:task.id}}">
+                    <span class="material-symbols-outlined">edit</span>
+                </router-link>
+                <span @click="toggleComplete()" class="material-symbols-outlined check">check</span>
+            </div>
+        </div>
+        <div class="details" v-if="showDetails">
+            <p>{{ task.description }}</p>
+        </div>
+    </div>
+</template>
+<script>
+export default {
+    props: ['task'],
+    emits: ['delete', 'complete'],
+    data() {
+        return {
+            showDetails: false,
+            uri: 'http://localhost:3000/tasks/' + this.task.id
+        }
+    },
+    methods: {
+        toggleDetail(){
+            this.showDetails = !this.showDetails
+        },
+        deleteTask(){
+            fetch(this.uri, {method:'DELETE'}).then(() => this.$emit('delete', this.task.id))
+            .catch(err => console.log(err.message))
+        },
+        toggleComplete(){
+            fetch(this.uri, {method:'PUT',
+                headers:{'Content-Type': 'application/json'},
+                body:JSON.stringify({
+                    title: this.task.title,
+                    description: this.task.description,
+                    complete: !this.task.complete
+                })
+            }).then(() => this.$emit('complete', this.task.id)).catch(err => console.log(err.message))
+        }
+    },
+}
+</script>
+<style scoped>
+.task{
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    padding: 10px 20px;
+    margin: 20px 0px;
+    background: white;
+    border-radius: 20px;
+    border-left: 8px solid palevioletred;
+}
+
+.actions {
+    padding: 20px 0px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.actions h3 {
+    cursor: pointer;
+}
+
+.details {
+    padding: 20px 0px;
+}
+
+.material-symbols-outlined{
+    font-size: 25px;
+    margin-left: 10px;
+    color: gray;
+    cursor: pointer;
+}
+
+.task.complete {
+    border-left: 8px solid green
+}
+
+.task.complete .check {
+    background: darkgreen;
+    color: white;
+    border-radius: 3px;
+}
+</style>
